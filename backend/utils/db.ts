@@ -3,10 +3,11 @@ require('dotenv').config();
 
 const dburl = process.env.DB_URL || '';
 
+
 //establish a db connection
 const connectDB = async () => {
     try {
-        await mongoose.connect(dburl).then((data:any) =>{
+        await mongoose.connect(dburl.trim()).then((data:any) =>{
             console.log(`Database connected with ${data.connection.host}`);
         })
     } catch (error:any) {

@@ -12,6 +12,7 @@ import analyticsRouter from "./routes/analytics.route";
 import layoutRouter from "./routes/layout.routes";
 
 export const app = express();
+const corsURL = process.env.ORIGIN || " ";
 
 //body Parser
 app.use(express.json({ limit: "50mb" }));
@@ -22,7 +23,8 @@ app.use(cookieParser());
 //cors => cross orgin resourse sharing
 app.use(
   cors({
-    origin: process.env.ORIGIN,
+    origin: [corsURL.trim()],
+    credentials: true, // allow cookies to be sent
   })
 );
 

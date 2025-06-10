@@ -1,0 +1,8 @@
+FROM node:24-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["npm", "run", "dev"]
+# This Dockerfile sets up a Node.js environment using the official Node.js 24 Alpine image.

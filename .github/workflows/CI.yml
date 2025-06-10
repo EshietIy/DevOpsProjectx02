@@ -14,12 +14,28 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Checkout
         uses: actions/checkout@v2
-      - name: build Frontend
+      - name: build frontend
         run : docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:0.1
-      - name: build Backend
+      - name: build backend
         run : docker build ./backend -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:0.1
       - name: Push to Docker
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend:0.1
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend:0.1
-        
+
+  Run-docker-compose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute remote SSH commands using password
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HOST}}
+          username: ${{ secrets.USERNAME}}
+          password: ${{ secrets.PASSWORD}}
+          port: ${{ secrets.PORT }}
+          script: |
+            if [ -d ~/lms ]; then
+              curl -o  ~/lms/docker-compose.yml https://raw.githubusercontent.com/linuxserver-io/lms/main/docker-compose.yml
+              cd ~/lms
+            fi
+             docker compose --env-file docker-compose.env up -d

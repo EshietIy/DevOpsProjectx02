@@ -1,0 +1,41 @@
+services:
+  frontend:
+    depends_on:
+      - backend
+    image: eshietiy/frontend:0.1
+    container_name: frontend
+    environment:
+      - NEXT_PUBLIC_API_SERVER_URI= ${api_server_uri}
+      - GOOGLE_CLIENT_ID= ${google_client_id}
+      - GOOGLE_CLIENT_SECRET= ${google_client_secret}
+      - GITHUB_CLIENT_ID= ${github_client_id}
+      - GITHUB_CLIENT_SECRET= ${github_client_secret}
+      # create react secret key
+      - REACT_SECRET_KEY= ${react_secret_key}
+    ports:
+      - "3000:3000"
+  backend:
+    image: eshietiy/backend:0.1
+    container_name: backend
+    environment:
+      - PORT= 8000
+      - ORIGIN=http://localhost:3000
+      - NODE_ENV=development
+      - DB_URL= ${db_url}
+      - CLOUD_NAME= ${cloud_name}
+      - CLOUD_API_KEY= ${cloud_api_key}
+      - CLOUD_SECRET_KEY= ${cloud_secret_key}
+      - REDIS_URL= ${redis_url}
+      - ACTIVATION_SECRET= ${activation_secret}
+      - REFRESH_TOKEN= ${refresh_token}
+      - ACCESS_TOKEN= ${access_token}
+      - ACCESS_TOKEN_AGE= 5
+      - REFRESH_TOKEN_AGE= 3
+      - SMTP_HOST= smtp.gamil.com
+      - SMTP_SERVICE= gmail
+      - SMTP_PORT= 465
+      - SMTP_MAIL= eeshiet490@gmail.com
+      - SMTP_PASSWORD= ${smtp_password}
+    ports:
+      - "8000:8000"
+
