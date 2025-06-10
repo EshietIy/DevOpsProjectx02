@@ -24,6 +24,7 @@ jobs:
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend:0.1
 
   Run-docker-compose:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Execute remote SSH commands using password
@@ -32,10 +33,9 @@ jobs:
           host: ${{ secrets.HOST}}
           username: ${{ secrets.USERNAME}}
           password: ${{ secrets.PASSWORD}}
-          port: ${{ secrets.PORT }}
           script: |
             if [ -d ~/lms ]; then
-              curl -o  ~/lms/docker-compose.yml https://raw.githubusercontent.com/linuxserver-io/lms/main/docker-compose.yml
+              curl -o  ~/lms/docker-compose.yml https://raw.githubusercontent.com/EshietIy/DevOpsProjectx02/refs/heads/master/compose.yml
               cd ~/lms
             fi
              docker compose --env-file docker-compose.env up -d
