@@ -23,7 +23,7 @@ app.use(cookieParser());
 //cors => cross orgin resourse sharing
 app.use(
   cors({
-    origin: [corsURL.trim()],
+    origin: ["www.eshiet.i.ng"],
     credentials: true, // allow cookies to be sent
   })
 );
