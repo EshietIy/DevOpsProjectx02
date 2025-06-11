@@ -13,7 +13,7 @@ services:
       # create react secret key
       - REACT_SECRET_KEY= ${react_secret_key}
     ports:
-      - "3000:3000"
+      - "80:3000"
   backend:
     image: eshietiy/backend:0.1
     container_name: backend
