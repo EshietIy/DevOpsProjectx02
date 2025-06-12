@@ -13,6 +13,7 @@ import layoutRouter from "./routes/layout.routes";
 
 export const app = express();
 const corsURL = process.env.ORIGIN || " ";
+console.log(corsURL.trim());
 
 //body Parser
 app.use(express.json({ limit: "50mb" }));
@@ -23,7 +24,7 @@ app.use(cookieParser());
 //cors => cross orgin resourse sharing
 app.use(
   cors({
-    origin: ["www.eshiet.i.ng"],
+    origin: [corsURL.trim()],
     credentials: true, // allow cookies to be sent
   })
 );
