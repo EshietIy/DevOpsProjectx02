@@ -19,7 +19,7 @@ services:
     container_name: backend
     environment:
       - PORT= 8000
-      - ORIGIN=http://localhost:3000
+      - ORIGIN=http://www.eshiet.i.ng
       - NODE_ENV=development
       - DB_URL= ${db_url}
       - CLOUD_NAME= ${cloud_name}
