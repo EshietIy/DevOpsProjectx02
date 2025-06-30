@@ -22,10 +22,10 @@ jobs:
         run : docker build ./backend -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:$IMAGE_TAG  
       - name: Push to Docker
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
+          docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/frontend
+          docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/backend
 
-  Run-docker-compose:
+  Run-deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -36,4 +36,5 @@ jobs:
           username: ${{ secrets.USERNAME}}
           password: ${{ secrets.PASSWORD}}
           script: |
-            /home/eshiet/lms/deploy.sh
+            cd /home/eshiet/lms
+            ./deploy.sh
