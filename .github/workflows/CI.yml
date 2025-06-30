@@ -12,16 +12,18 @@ jobs:
         with:
           username:  ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name : Genrate docker image tags
+        run: echo "IMAGE_TAG=$GITHUB_SHA--${DATE +%Y%m%d%H%M%S}--$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v21
       - name: build frontend
-        run : docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:0.1
+        run : docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG
       - name: build backend
-        run : docker build ./backend -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:0.1
+        run : docker build ./backend -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:$IMAGE_TAG  
       - name: Push to Docker
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend:0.1
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend:0.1
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
 
   Run-docker-compose:
     needs: build
@@ -34,8 +36,4 @@ jobs:
           username: ${{ secrets.USERNAME}}
           password: ${{ secrets.PASSWORD}}
           script: |
-            if [ -d ~/lms ]; then
-              curl -o  ~/lms/docker-compose.yml https://raw.githubusercontent.com/EshietIy/DevOpsProjectx02/refs/heads/master/compose.yml
-              cd ~/lms
-            fi
-             docker compose --env-file docker-compose.env up -d
+            /home/eshiet/lms/deploy.sh
