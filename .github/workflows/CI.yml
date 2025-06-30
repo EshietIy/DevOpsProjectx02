@@ -15,7 +15,7 @@ jobs:
       - name : Genrate docker image tags
         run: echo "IMAGE_TAG=$GITHUB_SHA--${DATE +%Y%m%d%H%M%S}--$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v21
+        uses: actions/checkout@v4
       - name: build frontend
         run : docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG
       - name: build backend
