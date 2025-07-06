@@ -1,4 +1,5 @@
 docker-compose.env
+nginx.conf
 # frontend files
 frontend/.env
 frontend/node_modules

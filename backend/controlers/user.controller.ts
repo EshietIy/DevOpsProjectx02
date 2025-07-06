@@ -15,6 +15,7 @@ import {
   sendToken,
 } from "../utils/jwt";
 import { nextTick } from "process";
+import { logger } from "../utils/logger";
 
 
 //register user
@@ -33,6 +34,7 @@ export const registrationUser = CatchAsyncError(
       // check if the email already exist
       const isEmailExist = await userModel.findOne({ email });
       if (isEmailExist) {
+        logger.error(`Email already exist: ${email}`);
         return next(new ErrorHandler("Email already exist", 400));
       }
       const user: IRegstrationBody = {
@@ -55,6 +57,7 @@ export const registrationUser = CatchAsyncError(
           template: "activation-mail.ejs",
           data,
         });
+        logger.info(`Activation email sent to ${user.email}`);
         res.status(201).json({
           success: true,
           message: `please check your email ${user.email} to activate your account`,
@@ -142,12 +145,15 @@ export const loginUser = CatchAsyncError(
       }
       const user = await userModel.findOne({ email }).select("+password");
       if (!user) {
+        logger.error(`Invalid login attempt with email: ${email}`);
         return next(new ErrorHandler("Invalied Email or Password", 400));
       }
       const isPasswordMatch = await user.comparePassword(password);
       if (!isPasswordMatch) {
+        logger.error(`Invalid login attempt with email: ${email}`);
         return next(new ErrorHandler("Invalied Email or Password", 400));
       }
+      logger.info(`User logged in: ${email}`);
       sendToken(user, 200, res);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
@@ -168,7 +174,9 @@ export const logoutUser = CatchAsyncError(
       // delete user from redis
       const userID = req.user?._id as string;
       redis.del(userID);
+      logger.info(`User logged out: ${userID}`);
     } catch (error: any) {
+      logger.error(`Logout error: ${error.message}`);
       return next(new ErrorHandler(error.message, 400));
     }
   }
