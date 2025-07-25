@@ -16,6 +16,9 @@ import {
 } from "../utils/jwt";
 import { nextTick } from "process";
 import { logger } from "../utils/logger";
+import { trace } from '@opentelemetry/api';
+
+const tracer = trace.getTracer('user-service', '0.1.0');
 
 
 //register user
@@ -138,6 +141,7 @@ interface IloginRequest {
 
 export const loginUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
+    return tracer.startActiveSpan('rollTheDice', (span: Span) => {
     try {
       const { email, password } = req.body as IloginRequest;
       if (!email || !password) {
@@ -155,9 +159,12 @@ export const loginUser = CatchAsyncError(
       }
       logger.info(`User logged in: ${email}`);
       sendToken(user, 200, res);
+    
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
+    span.end();
+    });
   }
 );
 
