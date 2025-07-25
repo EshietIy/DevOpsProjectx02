@@ -141,33 +141,30 @@ interface IloginRequest {
 
 export const loginUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
-    return tracer.startActiveSpan('rollTheDice', (span: Span) => {
+    return tracer.startActiveSpan('rollTheDice', async (span: Span) => {
     try {
       const { email, password } = req.body as IloginRequest;
       if (!email || !password) {
-        span.end();
         return next(new ErrorHandler("Enter your email and password", 400));
       }
       const user = await userModel.findOne({ email }).select("+password");
       if (!user) {
         logger.error(`Invalid login attempt with email: ${email}`);
-        span.end();
         return next(new ErrorHandler("Invalied Email or Password", 400));
       }
       const isPasswordMatch = await user.comparePassword(password);
       if (!isPasswordMatch) {
         logger.error(`Invalid login attempt with email: ${email}`);
-        span.end();
         return next(new ErrorHandler("Invalied Email or Password", 400));
       }
       logger.info(`User logged in: ${email}`);
       sendToken(user, 200, res);
     
     } catch (error: any) {
-      span.end();
       return next(new ErrorHandler(error.message, 400));
+    } finally {
+      span.end();
     }
-    
     });
   }
 );
