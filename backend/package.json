@@ -18,7 +18,6 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.7.5",
     "@opentelemetry/api": "^1.6.0",
-    "@opentelemetry/resource": "^0.44.0",
     "@opentelemetry/sdk-node": "^0.44.0",
     "@opentelemetry/semantic-conventions": "^0.44.0",
     "@opentelemetry/exporter-trace-otlp-http": "^0.44.0",
