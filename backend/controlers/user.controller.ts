@@ -16,7 +16,7 @@ import {
 } from "../utils/jwt";
 import { nextTick } from "process";
 import { logger } from "../utils/logger";
-import { trace } from '@opentelemetry/api';
+import { trace, Span } from '@opentelemetry/api';
 
 const tracer = trace.getTracer('user-service', '0.1.0');
 
