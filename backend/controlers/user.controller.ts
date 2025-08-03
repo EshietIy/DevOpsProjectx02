@@ -141,7 +141,7 @@ interface IloginRequest {
 
 export const loginUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
-    return tracer.startActiveSpan('rollTheDice', async (span: Span) => {
+    return tracer.startActiveSpan('loginUser', async (span: Span) => {
     try {
       const { email, password } = req.body as IloginRequest;
       if (!email || !password) {
