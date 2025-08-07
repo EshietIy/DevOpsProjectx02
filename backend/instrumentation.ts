@@ -6,6 +6,7 @@ import {
   ATTR_SERVICE_NAME,
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
+require("dotenv").config();
 
 
 
@@ -17,7 +18,7 @@ const sdk = new NodeSDK({
   }),
   traceExporter: new OTLPTraceExporter({
     // optional - default url is http://localhost:4318/v1/traces
-    url: 'http://jaeger:4318/v1/traces',
+    url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT,
     // optional - collection of custom headers to be sent with each request, empty by default
     headers: {},
   }),
