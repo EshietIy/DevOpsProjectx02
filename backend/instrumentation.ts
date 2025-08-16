@@ -7,7 +7,7 @@ import {
   ATTR_SERVICE_VERSION,
 } from '@opentelemetry/semantic-conventions';
 require("dotenv").config();
-const backEnd = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
+const backend = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
 
 
 const sdk = new NodeSDK({
