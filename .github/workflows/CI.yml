@@ -8,7 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Docker Login
-        id: login_docker
         uses: docker/login-action@v3.4.0
         with:
           username:  ${{ secrets.DOCKERHUB_USERNAME }}
@@ -25,10 +24,7 @@ jobs:
         run: |
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/frontend
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/backend
-      - name: test output
-        if: ${{ always() }}
-        run: |
-          echo "The output of login is ${{ steps.login_docker.outputs }} "
+
   Run-deploy:
     needs: build
     runs-on: ubuntu-latest
