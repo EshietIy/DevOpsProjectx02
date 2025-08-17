@@ -30,7 +30,7 @@ jobs:
         run : |
         
           docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG 2>&1 | tee output.txt
-          tep_exit_code=${PIPESTATUS[0]}
+          tep_exit_code=$PIPESTATUS[0]
           if [ $step_exit_code == 1 ]; then
             cat output.txt
           fi
