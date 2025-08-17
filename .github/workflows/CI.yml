@@ -29,8 +29,14 @@ jobs:
         id: build_frontend
         run : |
           set +e # bash should not exit on command failure
-          docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG > tee output.txt 2>&1
+
+          docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG > output.txt 2>&1
+
           step_exit_code=$?
+
+          if [$step_exit_code == 0]; then
+            cat output.txt
+          fi
 
           echo "The Exit code is: $step_exit_code"
 
