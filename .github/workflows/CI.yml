@@ -31,8 +31,17 @@ jobs:
         
           docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG 2>&1 | tee output.txt
           step_exit_code=${PIPESTATUS[0]}
-          if [ $step_exit_code == 1 ]; then
-            cat output.txt
+
+          if [ $step_exit_code == 0 ]; then
+             echo "Status_state=✅ success" >> $GITHUB_ENV
+
+          else
+            echo "Status_state=❌ failed" >> $GITHUB_ENV
+            echo "Failed_job=Build" >> $GITHUB_ENV
+            echo "Work-flow started by ${{github.actor}} has ${{Status_state}} \n ***** Details ***** \n  Job: ${{Failed_job}} " > result.txt
+            cat output.txt >> result.txt
+            cat result.txt
+            exit ${step_exit_code}
           fi
 
           echo "The Exit code is: $step_exit_code"
