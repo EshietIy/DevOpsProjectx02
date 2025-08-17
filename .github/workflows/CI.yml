@@ -26,7 +26,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: build frontend
-        run : docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG
+        id: build_frontend
+        run : |
+          docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG 2>&1 | tee build.log
+      
+      - name: check frontend build
+        id: _if_frontend_failed
+        if: ${{always()}}
+        run: |
+          if [[${{steps.build_frontend.conclusion}} == "failure"]]; then
+            echo "Error_message=$(cat build.log | grep 'error')" >> $GITHUB_ENV
+            echo "Failed_job=Build" >> $$GITHUB_ENV
+
       - name: build backend
         run : docker build ./backend -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:$IMAGE_TAG  
       - name: Push to Docker
