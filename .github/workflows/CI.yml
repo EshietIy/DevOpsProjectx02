@@ -6,8 +6,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      error_message: ${{steps.}}
     steps:
       - name: Docker Login
         id: login
