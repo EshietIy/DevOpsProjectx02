@@ -51,11 +51,11 @@ jobs:
             cd /home/eshiet/lms
             ./deploy.sh
       - name: check deploy failure
-        if: ${{steps.deploy_to_linux.outcome == 'failure'}}
+        if: ${{failure()}}
         run: |
           echo "Error_message=Can not login to ${{secrets.HOST}}" >> $GITHUB_ENV
           echo "Failed_job=Run-deploy" >> $GITHUB_ENV
       - name: Run on failure
-        if: ${{job.status == 'failure'}}
+        if: ${{failure()}}
         run: |
           echo "The workflow started by ${{github.actor}} has failed see details >>> Job: $Failed_job, Error Message: $Error_message"
