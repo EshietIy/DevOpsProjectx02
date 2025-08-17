@@ -52,7 +52,7 @@ jobs:
             ./deploy.sh
 
       - name: check deploy failure
-        if: ${{steps.deploy_to_linux.conclusion == 'failure'}}
+        if: ${{failure() && steps.deploy_to_linux.conclusion == 'failure'}}
         run: |
           echo "Error_message=Can not login to ${{secrets.HOST}}" >> $GITHUB_ENV
           echo "Failed_job=Run-deploy" >> $GITHUB_ENV
