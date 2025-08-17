@@ -34,7 +34,7 @@ jobs:
 
           step_exit_code=$?
 
-          if [$step_exit_code == 0]; then
+          if [$step_exit_code == 1]; then
             cat output.txt
           fi
 
