@@ -28,14 +28,13 @@ jobs:
       - name: build frontend
         id: build_frontend
         run : |
-          docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG >> build.log
-      
+          Message_log=$(docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG) >> $GITHUB_OUTPUT
+
       - name: check frontend build
         id: _if_frontend_failed
         if: ${{always()}}
         run: |
           if [[ "${{ steps.build_frontend.conclusion }}" == "failure" ]]; then
-            cat build.log
             echo "Error_message=something went wrong" >> $GITHUB_ENV
             echo "Failed_job=Build" >> $GITHUB_ENV
           fi
