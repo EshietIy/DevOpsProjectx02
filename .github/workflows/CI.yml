@@ -28,32 +28,18 @@ jobs:
       - name: build frontend
         id: build_frontend
         run : |
-        
           docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG 2>&1 | tee output.txt
           step_exit_code=${PIPESTATUS[0]}
 
           if [ $step_exit_code == 0 ]; then
-             echo "Status_state=✅ success" >> $GITHUB_ENV
-
+              echo -e "Work-flow started by ${{github.actor}} has ✅ Passed \n ***** Details ***** \nJob: Build" > result.txt
+              echo ""Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
           else
-            echo Status_state=❌ failed >> $GITHUB_ENV
-            echo Failed_job=Build >> $GITHUB_ENV
             echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
-            cat output.txt >> result.txt
-            cat result.txt
+            cat output.txt > result.txt
             exit ${step_exit_code}
           fi
-
-          echo "The Exit code is: $step_exit_code"
-
-      - name: check frontend build
-        id: _if_frontend_failed
-        if: ${{always()}}
-        run: |
-          if [[ "${{ steps.build_frontend.conclusion }}" == "failure" ]]; then
-            echo "Error_message=something went wrong" >> $GITHUB_ENV
-            echo "Failed_job=Build" >> $GITHUB_ENV
-          fi
+      
       - name: build backend
         run : docker build ./backend -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:$IMAGE_TAG  
       - name: Push to Docker
@@ -61,10 +47,9 @@ jobs:
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/frontend
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/backend
       - name: Build and push LMS image
-        if: ${{failure()}}
+        if: ${{always()}}
         run: |
-           echo "The workflow started by ${{github.actor}} has failed see details >>> Job: $Failed_job, Error Message: $Message_log"
-
+           
   Run-deploy:
     needs: build
     runs-on: ubuntu-latest
