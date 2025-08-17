@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      error_message: ${{steps.}}
     steps:
       - name: Docker Login
         id: login
@@ -13,6 +15,12 @@ jobs:
         with:
           username:  ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: check login failure
+        id: check_login
+        if: ${{steps.login.outcome == 'failure'}}
+        run: |
+          echo "Error_message='Docker login failure'" >> $$GITHUB_ENV
+          echo "Failed_job=Build" >> $$GITHUB_ENV
       - name : Genrate docker image tags
         run: echo "IMAGE_TAG=$GITHUB_SHA--$(date +%Y%m%d%H%M%S)--$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
       - name: Checkout
@@ -26,14 +34,16 @@ jobs:
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/frontend
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/backend
       - name: Build and push LMS image
-        if: ${{always()}}
+        if: ${{failure()}}
         run: |
-          cat ${{steps.login.outputs}}
+           echo "The workflow started by ${{github.actor}} has failed see details >>> Job: $Failed_job, Error Message: $Error_message"
+
   Run-deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Execute remote SSH commands using password
+        id: deploy_to_linux
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.HOST}}
@@ -42,3 +52,12 @@ jobs:
           script: |
             cd /home/eshiet/lms
             ./deploy.sh
+      - name: check deploy failure
+        if: ${{steps.deploy_to_linux.outcome == 'failure'}}
+        run: |
+          echo "Error_message=Can not login to ${{secrets.HOST}}" >> $GITHUB_ENV
+          echo "Failed_job=Run-deploy" >> $GITHUB_ENV
+      - name: Run on failure
+        if: ${{jobs.Run-deploy.outcome == 'failure'}}
+        run: |
+          echo "The workflow started by ${{github.actor}} has failed see details >>> Job: $Failed_job, Error Message: $Error_message"
