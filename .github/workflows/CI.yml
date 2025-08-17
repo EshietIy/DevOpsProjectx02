@@ -36,8 +36,8 @@ jobs:
              echo "Status_state=✅ success" >> $GITHUB_ENV
 
           else
-            echo "Status_state=❌ failed" >> $GITHUB_ENV
-            echo "Failed_job=Build" >> $GITHUB_ENV
+            echo Status_state=❌ failed >> $GITHUB_ENV
+            echo Failed_job=Build >> $GITHUB_ENV
             echo -e "Work-flow started by ${{github.actor}} has $Status_state \n ***** Details ***** \n  Job: $Failed_job " > result.txt
             cat output.txt >> result.txt
             cat result.txt
