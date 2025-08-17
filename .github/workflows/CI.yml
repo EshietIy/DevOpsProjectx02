@@ -38,6 +38,7 @@ jobs:
           else
             echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
             cat output.txt > result.txt
+            echo "Theexit code is ${step_exit_code}"
             exit ${step_exit_code}
           fi
       
