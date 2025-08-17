@@ -34,6 +34,7 @@ jobs:
           if [ $step_exit_code == 0 ]; then
               echo -e "Work-flow started by ${{github.actor}} has ✅ Passed \n ***** Details ***** \nJob: Build" > result.txt
               echo ""Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
+              echo ${step_exit_code}
           else
             echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
             cat output.txt > result.txt
