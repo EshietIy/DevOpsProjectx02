@@ -50,10 +50,9 @@ jobs:
           script: |
             cd /home/eshiet/lms
             ./deploy.sh
-          continue-on-error: true
-          
+
       - name: check deploy failure
-        if: ${{steps.deploy_to_linux.outcome == 'failure'}}
+        if: ${{steps.deploy_to_linux.conclusion == 'failure'}}
         run: |
           echo "Error_message=Can not login to ${{secrets.HOST}}" >> $GITHUB_ENV
           echo "Failed_job=Run-deploy" >> $GITHUB_ENV
