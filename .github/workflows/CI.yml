@@ -34,7 +34,7 @@ jobs:
         id: _if_frontend_failed
         if: ${{always()}}
         run: |
-          if [[ "${{steps.build_frontend.conclusion}}" == "failure"]]; then
+          if [[ "${{ steps.build_frontend.conclusion }}" == "failure" ]]; then
             echo "Error_message=something went wrong" >> $GITHUB_ENV
             echo "Failed_job=Build" >> $$GITHUB_ENV
           fi
