@@ -15,7 +15,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: check login failure
         id: check_login
-        if: ${{steps.login.outcome == 'failure'}}
+        if: ${{always()}}
         run: |
           echo "Error_message='Docker login failure'" >> $$GITHUB_ENV
           echo "Failed_job=Build" >> $$GITHUB_ENV
@@ -52,7 +52,7 @@ jobs:
             ./deploy.sh
 
       - name: check deploy failure
-        if: ${{failure() && steps.deploy_to_linux.conclusion == 'failure'}}
+        if: ${{always()}}
         run: |
           echo "Error_message=Can not login to ${{secrets.HOST}}" >> $GITHUB_ENV
           echo "Failed_job=Run-deploy" >> $GITHUB_ENV
