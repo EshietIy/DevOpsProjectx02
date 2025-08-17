@@ -35,8 +35,9 @@ jobs:
         if: ${{always()}}
         run: |
           if [[ "${{ steps.build_frontend.conclusion }}" == "failure" ]]; then
+            cat build.log
             echo "Error_message=something went wrong" >> $GITHUB_ENV
-            echo "Failed_job=Build" >> $$GITHUB_ENV
+            echo "Failed_job=Build" >> $GITHUB_ENV
           fi
       - name: build backend
         run : docker build ./backend -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:$IMAGE_TAG  
