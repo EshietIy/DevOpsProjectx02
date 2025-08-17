@@ -17,8 +17,10 @@ jobs:
         id: check_login
         if: ${{always()}}
         run: |
-          echo "Error_message='Docker login failure'" >> $$GITHUB_ENV
-          echo "Failed_job=Build" >> $$GITHUB_ENV
+          if [[ ${{steps.login.conclusion} == 'falure'} ]]; then
+            echo "Error_message=Docker login failure" >> $$GITHUB_ENV
+            echo "Failed_job=Build" >> $$GITHUB_ENV
+          fi
       - name : Genrate docker image tags
         run: echo "IMAGE_TAG=$GITHUB_SHA--$(date +%Y%m%d%H%M%S)--$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
       - name: Checkout
@@ -54,8 +56,10 @@ jobs:
       - name: check deploy failure
         if: ${{always()}}
         run: |
-          echo "Error_message=Can not login to ${{secrets.HOST}}" >> $GITHUB_ENV
-          echo "Failed_job=Run-deploy" >> $GITHUB_ENV
+          if [[ "${{ steps.deploy_to_linux.conclusion }}" == "failure" ]]; then
+            echo "Error_message=Can not login to remote machine ${{ secrets.HOST }}" >> $GITHUB_ENV
+            echo "Failed_job=Run-deploy" >> $GITHUB_ENV
+          fi
       - name: Run on failure
         if: ${{failure()}}
         run: |
