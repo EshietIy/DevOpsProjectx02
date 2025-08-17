@@ -28,7 +28,7 @@ jobs:
       - name: build frontend
         id: build_frontend
         run : |
-          Message_log=$(docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG) >> $GITHUB_OUTPUT
+          echo Message_log=$(docker build ./frontend -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend:$IMAGE_TAG) >> $GITHUB_ENV
 
       - name: check frontend build
         id: _if_frontend_failed
@@ -47,7 +47,7 @@ jobs:
       - name: Build and push LMS image
         if: ${{failure()}}
         run: |
-           echo "The workflow started by ${{github.actor}} has failed see details >>> Job: $Failed_job, Error Message: $Error_message"
+           echo "The workflow started by ${{github.actor}} has failed see details >>> Job: $Failed_job, Error Message: $Message_log"
 
   Run-deploy:
     needs: build
