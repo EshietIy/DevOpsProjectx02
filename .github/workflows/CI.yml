@@ -56,6 +56,6 @@ jobs:
           echo "Error_message=Can not login to ${{secrets.HOST}}" >> $GITHUB_ENV
           echo "Failed_job=Run-deploy" >> $GITHUB_ENV
       - name: Run on failure
-        if: ${{jobs.Run-deploy.outcome == 'failure'}}
+        if: ${{job.status == 'failure'}}
         run: |
           echo "The workflow started by ${{github.actor}} has failed see details >>> Job: $Failed_job, Error Message: $Error_message"
