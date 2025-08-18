@@ -36,6 +36,7 @@ jobs:
               echo "Status=success" >> $GITHUB_ENV
               echo -e "Work-flow started by ${{github.actor}} has ✅ Passed \n ***** Details ***** \nJob: Build" > result.txt
               echo "Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
+              echo "Result_text=$(cat result.txt)" >> $GITHUB_ENV
           else
             echo "Status=failure" >> $GITHUB_ENV
             echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
@@ -58,7 +59,7 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
-            text: "$(cat result.txt)"
+            text: "${{env.Result_text}}"
       
   Run-deploy:
     needs: build
