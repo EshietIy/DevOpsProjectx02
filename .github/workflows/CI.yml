@@ -13,11 +13,7 @@ jobs:
         with:
           username:  ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-        run: |
-          if [[ "${{ steps.login.conclusion }}" == 'failure' ]]; then
-            echo "Docker login failed"
-            exit 1
-          fi
+       
       - name: check login failure
         id: check_login
         if: ${{always()}}
