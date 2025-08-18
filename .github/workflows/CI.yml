@@ -63,7 +63,7 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             text: "$(cat result.txt)"
-        
+
            
   Run-deploy:
     needs: build
