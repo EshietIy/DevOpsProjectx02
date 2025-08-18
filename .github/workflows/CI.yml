@@ -13,6 +13,11 @@ jobs:
         with:
           username:  ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: |
+          if [[ "${{ steps.login.conclusion }}" == 'failure' ]]; then
+            echo "Docker login failed"
+            exit 1
+          fi
       - name: check login failure
         id: check_login
         if: ${{always()}}
@@ -32,9 +37,11 @@ jobs:
           step_exit_code=${PIPESTATUS[0]}
 
           if [ $step_exit_code == 0 ]; then
+              echo "Status=success" >> $GITHUB_ENV
               echo -e "Work-flow started by ${{github.actor}} has ✅ Passed \n ***** Details ***** \nJob: Build" > result.txt
               echo "Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
           else
+            echo "Status=failure" >> $GITHUB_ENV
             echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
             cat output.txt > result.txt
             exit ${step_exit_code}
@@ -46,8 +53,16 @@ jobs:
         run: |
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/frontend
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/backend
-      - name: Build and push LMS image
+
+      
+      - name: Send Slack notification
         if: ${{always()}}
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            text: "$(cat result.txt)"
         run: |
            
   Run-deploy:
