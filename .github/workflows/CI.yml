@@ -44,7 +44,7 @@ jobs:
             echo "Status=failure" >> $GITHUB_ENV
             echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
             cat output.txt > result.txt
-            echo "Result_text=$(cat result.txt)" >> $GITHUB_ENV
+            echo 'Result_text="$(cat result.txt)"'>> $GITHUB_ENV
             echo "***************print environment variables***************"
             echo $Result_text
             exit ${step_exit_code}
