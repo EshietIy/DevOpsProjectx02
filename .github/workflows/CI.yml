@@ -37,13 +37,12 @@ jobs:
 
           if [ $step_exit_code == 0 ]; then
               echo "Status=success" >> $GITHUB_ENV
-              echo -e "Work-flow started by ${{github.actor}} has ✅ Passed \n ***** Details ***** \nJob: Build" > result.txt
-              echo "Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
+              echo -e "Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
               echo "Result_text=$(cat result.txt)" >> $GITHUB_ENV
           else
             echo "Status=failure" >> $GITHUB_ENV
             echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
-            cat output.txt > result.txt
+            cat output.txt >> result.txt
             echo "Result_text<<EOF" >> $GITHUB_ENV
             tail -n 20 result.txt >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
@@ -52,7 +51,24 @@ jobs:
           fi
       
       - name: build backend
-        run : docker build ./backend -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:$IMAGE_TAG  
+        run : |
+          docker build ./backend -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest -t ${{ secrets.DOCKERHUB_USERNAME }}/backend:$IMAGE_TAG 2>&1 | tee output.txt
+          step_exit_code=${PIPESTATUS[0]}
+
+          if [ $step_exit_code == 0 ]; then
+              echo "Status=success" >> $GITHUB_ENV
+              echo -e "Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
+              echo "Result_text=$(cat result.txt)" >> $GITHUB_ENV
+          else
+            echo "Status=failure" >> $GITHUB_ENV
+            echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
+            cat output.txt >> result.txt
+            echo "Result_text<<EOF" >> $GITHUB_ENV
+            tail -n 20 result.txt >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+            
+            exit ${step_exit_code}
+          fi
       - name: Push to Docker
         run: |
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/frontend
