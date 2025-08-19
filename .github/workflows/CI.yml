@@ -61,7 +61,7 @@ jobs:
         uses: act10ns/slack@v2
         with:
           status: ${{ env.Status }}
-          message: "${{env.Result_text}}"
+          message: ${{env.Result_text}}
       
   Run-deploy:
     needs: build
