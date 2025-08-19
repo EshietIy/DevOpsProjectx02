@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     steps:
       - name: Docker Login
         id: login
@@ -26,7 +28,7 @@ jobs:
         run: echo "IMAGE_TAG=$GITHUB_SHA--$(date +%Y%m%d%H%M%S)--$GITHUB_RUN_ATTEMPT" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: build frontend
         id: build_frontend
         run : |
@@ -56,12 +58,10 @@ jobs:
       
       - name: Send Slack notification
         if: ${{always()}}
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: actions/slack@v2
         with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-            text: "${{env.Result_text}}"
+          status: ${{ env.Status }}
+          message: "${{env.Result_text}}"
       
   Run-deploy:
     needs: build
