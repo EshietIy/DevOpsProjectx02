@@ -58,7 +58,7 @@ jobs:
       
       - name: Send Slack notification
         if: ${{always()}}
-        uses: actions/slack@v2
+        uses: act10ns/slack@v2
         with:
           status: ${{ env.Status }}
           message: "${{env.Result_text}}"
