@@ -46,7 +46,7 @@ jobs:
             cat output.txt > result.txt
             echo "Result_text=$(cat result.txt)" >> $GITHUB_ENV
             echo "***************print environment variables***************"
-            echo $env.Result_text
+            echo $Result_text
             exit ${step_exit_code}
           fi
       
