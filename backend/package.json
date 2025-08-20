@@ -23,7 +23,7 @@
     "@opentelemetry/sdk-trace-node": "^2.0.1",
     "@opentelemetry/resources": "^2.0.1",
     "@opentelemetry/semantic-conventions":"^1.36.0",
-    "bcryptjs": "^2.4.3",
+    "bcryptjs": "^56565656",
     "cloudinary": "^2.5.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
