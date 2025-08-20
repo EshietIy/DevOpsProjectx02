@@ -71,7 +71,7 @@ jobs:
             echo "Intiator: ${{github.actor}}" >> format.md
             echo "<details><summary>" >> format.md
             echo "```" >> format.md
-            echo "$(cat output.txt)" >> format.md
+            cat output.txt >> format.md
             echo "```" >> format.md
             echo "</summary></details>" >> format.md
             echo "EOF" >> format.md
