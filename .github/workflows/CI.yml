@@ -62,8 +62,6 @@ jobs:
           else
             echo "Status=failure" >> $GITHUB_ENV
             echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
-            touch format.md
-            echo "EOF" > format.md
             echo "# Backend build" >> format.md
             echo "" >> format.md
             echo "## Build Failed ❌" >> format.md
@@ -79,7 +77,6 @@ jobs:
             echo "EOF" >> format.md
             echo "Result_text<<EOF" >> $GITHUB_ENV
             cat format.md >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
             
             exit ${step_exit_code}
           fi
