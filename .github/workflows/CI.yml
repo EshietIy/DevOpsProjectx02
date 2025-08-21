@@ -114,7 +114,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Error Logs:*\n```${{env.Error_log}}``` "
+                    "text": "*Error Logs:*\n ${{env.Error_log}} "
                   }
                 },
                 {
