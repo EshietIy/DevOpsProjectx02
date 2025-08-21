@@ -87,6 +87,7 @@ jobs:
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           payload: ${{env.Output_msg}}
+          webhook-type: webhook-trigger
       
   Run-deploy:
     needs: build
