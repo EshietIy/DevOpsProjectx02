@@ -86,7 +86,7 @@ jobs:
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          payload: ${{env.Output_msg}}
+          payload: ${{env.Result_text}}
       
   Run-deploy:
     needs: build
