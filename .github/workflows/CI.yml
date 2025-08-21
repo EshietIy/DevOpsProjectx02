@@ -83,10 +83,10 @@ jobs:
       
       - name: Send Slack notification
         if: ${{always()}}
-        uses: act10ns/slack@v2
+        uses: slackapi/slack-github-action@v2.1.1
         with:
-          status: ${{ env.Status }}
-          message: ${{env.Output_msg}}
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          payload: ${{env.Output_msg}}
       
   Run-deploy:
     needs: build
