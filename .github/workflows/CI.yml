@@ -67,6 +67,7 @@ jobs:
             echo "Formated_string<<EOF" >> $GITHUB_ENV
             $(cat failed.report.txt) >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
+            echo ${env.Formated_string}
 
             exit ${step_exit_code}
           fi
