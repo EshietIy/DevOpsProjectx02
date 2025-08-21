@@ -60,17 +60,15 @@ jobs:
               echo -e "Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
               echo "Result_text=$(cat result.txt)" >> $GITHUB_ENV
           else
-            echo "Error_log<<EOF" >> $GITHUB_ENV
-            $(cat output.txt | jq -Rs .) >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-            echo "Status=failure" >> $GITHUB_ENV
-            echo "Formated_string<<EOF" >> $GITHUB_ENV
-            $(cat failed.report.txt) >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-            echo ${env.Formated_string}
-
-            exit ${step_exit_code}
+            { echo "Error_log<<EOF"  jq -Rs . < output.txt echo "EOF"} >> "$GITHUB_ENV"
+            echo "Status=failure" >> "$GITHUB_ENV"
+            { echo "Formated_string<<EOF" cat failed.report.txt echo "EOF" } >> "$GITHUB_ENV"
+            # Correct way to echo the env var in bash
+            echo "$Formated_string"
+            exit "$step_exit_code"
           fi
+
+          
       - name: Push to Docker
         run: |
           docker push --all-tags ${{ secrets.DOCKERHUB_USERNAME }}/frontend
