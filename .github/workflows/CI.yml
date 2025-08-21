@@ -63,7 +63,7 @@ jobs:
             echo "Status=failure" >> $GITHUB_ENV
             jq -Rs . output.txt > formated.txt
             echo "ERROR_LOG<<EOF" >> $GITHUB_ENV
-            cat failed.report.txt >> $GITHUB_ENV
+            cat ./failed.report.txt >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
             > "$GITHUB_ENV"
             echo "EOF" >> $GITHUB_ENV
