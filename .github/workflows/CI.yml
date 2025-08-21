@@ -62,7 +62,7 @@ jobs:
           else
             echo "Status=failure" >> $GITHUB_ENV
             echo -e "Error_log<<EOF" >> $GITHUB_ENV
-            jq -Rs output.txt >> "$GITHUB_ENV"
+            jq -Rs . output.txt >> "$GITHUB_ENV"
             echo "EOF" >> $GITHUB_ENV
 
             echo -e "Output_msg<<EOF" >> $GITHUB_ENV
@@ -113,7 +113,7 @@ jobs:
                 {
                   "type": "section",
                   "text": {
-                    "type": "mrkdwn",
+                    "type": "plain_text",
                     "text": "*Error Logs:*\n```${{env.Error_log}}``` "
                   }
                 },
