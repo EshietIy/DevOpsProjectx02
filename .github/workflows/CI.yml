@@ -69,7 +69,7 @@ jobs:
             cat failed.repo.txt >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
 
-          
+            cat failed.repo.txt 
             echo "$Formated_string"
             exit "$step_exit_code"
           fi

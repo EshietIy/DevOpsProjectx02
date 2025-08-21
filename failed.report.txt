@@ -24,7 +24,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "*Error Logs:*\n```$(cat formated.txt)``` "
+				"text": "*Error Logs:*\n```${{Error_log}}``` "
 			}
 		},
 		{
