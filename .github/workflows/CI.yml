@@ -61,11 +61,12 @@ jobs:
               echo "Result_text=$(cat result.txt)" >> $GITHUB_ENV
           else
             echo "Status=failure" >> $GITHUB_ENV
-            jq -Rs . output.txt > formated.txt
-            echo "ERROR_LOG<<EOF" >> $GITHUB_ENV
-            cat ./failed.report.txt >> $GITHUB_ENV
+            echo -e "Error_log<<EOF" >> $GITHUB_ENV
+            jq -Rs . output.txt >> "$GITHUB_ENV"
             echo "EOF" >> $GITHUB_ENV
-            > "$GITHUB_ENV"
+
+            echo -e "Output_msg<<EOF" >> $GITHUB_ENV
+            cat failed.repo.txt >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
 
           
@@ -85,7 +86,7 @@ jobs:
         uses: act10ns/slack@v2
         with:
           status: ${{ env.Status }}
-          message: ${{env.ERROR_LOG}}
+          message: ${{env.Output_msg}}
       
   Run-deploy:
     needs: build
