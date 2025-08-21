@@ -60,24 +60,14 @@ jobs:
               echo -e "Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
               echo "Result_text=$(cat result.txt)" >> $GITHUB_ENV
           else
+            echo "Error_log<<EOF" >> $GITHUB_ENV
+            $(cat output.txt | jq -Rs .) >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
             echo "Status=failure" >> $GITHUB_ENV
-            echo -e "Work-flow started by ${{github.actor}} has ❌ failed\n ***** Details ***** \nJob: Build" > result.txt
-            echo "# Backend build" >> format.md
-            echo "" >> format.md
-            echo "## Build Failed ❌" >> format.md
-            echo "" >> format.md
-            echo "### Error Details" >> format.md
-            echo "" >> format.md
-            echo "Intiator: ${{github.actor}}" >> format.md
-            echo "<details><summary>" >> format.md
-            echo "```" >> format.md
-            cat output.txt >> format.md
-            echo "```" >> format.md
-            echo "</summary></details>" >> format.md
-            echo "EOF" >> format.md
-            echo "Result_text<<EOF" >> $GITHUB_ENV
-            cat format.md >> $GITHUB_ENV
-            
+            echo "Formated_string<<EOF" >> $GITHUB_ENV
+            $(cat failed.report.txt) >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+
             exit ${step_exit_code}
           fi
       - name: Push to Docker
@@ -91,7 +81,7 @@ jobs:
         uses: act10ns/slack@v2
         with:
           status: ${{ env.Status }}
-          message: ${{env.Result_text}}
+          message: ${{env.Formated_string}}
       
   Run-deploy:
     needs: build

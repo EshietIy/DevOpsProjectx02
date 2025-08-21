@@ -1,0 +1,34 @@
+{
+	"blocks": [
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "🚨 Build Failed"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Repo:* <https://github.com/${{ github.repository }}| Link >\n*User ID:* ${{github.actor}}\n *Status:* :x: Failed"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "*Error Logs:*\n```${{env.Error_log}}``` "
+			}
+		},
+		{
+			"type": "divider"
+		}
+	]
+}
