@@ -66,10 +66,10 @@ jobs:
             echo "EOF" >> $GITHUB_ENV
 
             echo -e "Output_msg<<EOF" >> $GITHUB_ENV
-            cat failed.repo.txt >> $GITHUB_ENV
+            cat failed.report.txt >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
 
-            cat failed.repo.txt 
+            cat failed.report.txt 
             echo "$Formated_string"
             exit "$step_exit_code"
           fi
