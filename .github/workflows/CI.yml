@@ -68,7 +68,7 @@ jobs:
           else
             echo "Status=Failed" >> $GITHUB_ENV
             echo "Status_icon=🚨" >> $GITHUB_ENV
-            echo "Status_msg=Failed at 'Build Frontend' step" >> $GITHUB_ENV
+            echo "Status_msg=Failed at 'Build Backend' step" >> $GITHUB_ENV
             echo "Maker_status=:x:" >> $GITHUB_ENV
             echo -e "Run_log<<EOF" >> $GITHUB_ENV
             tail -n 20 output.txt | jq -Rs . | sed -e 's/^"//' -e 's/"$//' >> $GITHUB_ENV
