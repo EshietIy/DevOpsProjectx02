@@ -100,7 +100,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Repo:* <https://github.com/${{ github.repository }}| Link >\n*Initiator's ID:* ${{github.actor}}\n *Status:* ${{env.Maker_status}} ${{env.Run_Status}}"
+                    "text": "*Repo:* <https://github.com/${{ github.repository }}| Link >\n*Initiator's ID:* ${{github.actor}}\n *Status:* ${{env.Maker_status}} ${{env.Status}}"
                   }
                 },
                 {
