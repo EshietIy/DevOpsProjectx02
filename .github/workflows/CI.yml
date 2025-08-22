@@ -56,21 +56,17 @@ jobs:
           step_exit_code=${PIPESTATUS[0]}
 
           if [ $step_exit_code == 0 ]; then
-              echo "Status=success" >> $GITHUB_ENV
-              echo -e "Work-flow started by ${{github.actor}} has ✅ Passed " > result.txt
-              echo "Result_text=$(cat result.txt)" >> $GITHUB_ENV
+              echo "Status=Succeeded" >> $GITHUB_ENV
+              echo "Status_icon=✅" >> $GITHUB_ENV
+              echo "Maker_status=:white_check_mark:" >> $GITHUB_ENV
+              echo "Run_log=🎉 Build completed successfully with no errors." >> $GITHUB_ENV
           else
-            echo "Status=failure" >> $GITHUB_ENV
-            echo -e "Error_log<<EOF" >> $GITHUB_ENV
+            echo "Status=Failed" >> $GITHUB_ENV
+            echo "Status_icon=🚨" >> $GITHUB_ENV
+            echo "Maker_status=:x:" >> $GITHUB_ENV
+            echo -e "Run_log<<EOF" >> $GITHUB_ENV
             tail -n 20 output.txt | jq -Rs . | sed -e 's/^"//' -e 's/"$//' >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
-
-            echo -e "Output_msg<<EOF" >> $GITHUB_ENV
-            cat failed.report.txt >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
-
-            cat failed.report.txt 
-            echo "$Formated_string"
             exit "$step_exit_code"
           fi
 
@@ -94,7 +90,7 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "🚨 Build Failed"
+                    "text": "${{env.Status_icon}} Build ${{env.Status}}"
                   }
                 },
                 {
@@ -104,7 +100,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Repo:* <https://github.com/${{ github.repository }}| Link >\n*Initiator's ID:* ${{github.actor}}\n *Status:* :x: Failed"
+                    "text": "*Repo:* <https://github.com/${{ github.repository }}| Link >\n*Initiator's ID:* ${{github.actor}}\n *Status:* ${{env.Maker_status}} ${{env.Run_Status}}"
                   }
                 },
                 {
@@ -114,11 +110,24 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "*Error Logs:*\n ``` ${{env.Error_log}} ```"
+                    "text": "*Run Response (Truncated):*\n ``` ${{env.Run_log}} ```"
                   }
                 },
                 {
                   "type": "divider"
+                },
+                 {
+                  "type": "actions",
+                  "elements": [
+                    {
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Full Logs"
+                      },
+                      "url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                    }
+                  ]
                 }
               ]
             }
